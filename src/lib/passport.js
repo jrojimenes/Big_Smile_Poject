@@ -7,23 +7,24 @@ const pool = require('../database');
 
 passport.use('local.signin', new localStrategy({
     
-    usernameField: 'username',
+    usernameField: 'nickName',
     passwordField: 'password',
     passReqToCallback: true
 
-  }, async (req, username, password, done) => {
-    const rows = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
-    if (rows.length > 0) {
-      const user = rows[0];
-      const validPassword = await helpers.matchPassword(password, user.password)
+  }, async (req, nickName, password, done) => {
+    const rows = await pool.query('CALL SPWEBRETURNUSERINFO(?,?)', [0, nickName]);
+    const objectResponse = rows[0];
+    if (objectResponse.length > 0) {
+      const user = objectResponse[0];
+      const validPassword = await helpers.matchPassword(password, user.fcUserPsw)
       if (validPassword) {
           //null-error/ user for persist/ message 
-        done(null, user, req.flash('success', 'Welcome ' + user.username));
+        done(null, user, req.flash('success', 'Welcome ' + user.fcUserNickName));
       } else {
-        done(null, false, req.flash('message', 'Incorrect Password'));
+        done(null, false, req.flash('errormessage', 'Incorrect Password'));
       }
     } else {
-      return done(null, false, req.flash('message', 'The Username does not exists.'));
+      return done(null, false, req.flash('errormessage', 'The Username does not exists.'));
     }
   }));  
 
@@ -31,41 +32,54 @@ passport.use('local.signin', new localStrategy({
 //////////////////////////////////////////////////////Method for signUp
 passport.use('local.signup', new localStrategy({
    
-    usernameField: 'username',
+    usernameField: 'nickName',
     passwordField: 'password',
     passReqToCallback: true
 
-}, async (req, username, password, done) => {
-try{
-    const {fullname} = req.body;
-    const newUsr = {
-      FICUSERNAME : username,
-      FICPASSWORD : await helpers.encryptPsw(password),
-      FCFULLNAME  : fullname
+}, async (req, nickName, password, done) => {
+
+    const {usrname, usrsecondname, usrlastname, mail, phone, profileId } = req.body;
+    let newUsr = {
+    PCUSERNAME       : usrname,
+    PCUSERSECONDNAME : usrsecondname,
+    PUSERLASTNAME    : usrlastname,
+    PCMAIL           : mail,
+    PIPHONENUMBER    : phone,
+    PIPROFILEID      : profileId,
+    PCNICKNAME       : nickName,
+    PCUSERPSW        : await helpers.encryptPsw(password)
     };
-   const result = await pool.query('CALL SPWEBINSERTNEWUSERS(?, ?, ?)',[newUsr.FICUSERNAME, 
-                                                                        newUsr.FICPASSWORD, 
-                                                                        newUsr.FCFULLNAME
-                                                                      ]);
-   newUsr.id = result.insertId;
+
+   const result = await pool.query('CALL SPWEBCREATEUSER(?, ?, ?, ?, ?, ?, ?, ?)',[    newUsr.PCUSERNAME, 
+                                                                                       newUsr.PCUSERSECONDNAME, 
+                                                                                       newUsr.PUSERLASTNAME,
+                                                                                       newUsr.PCMAIL,
+                                                                                       newUsr.PIPHONENUMBER,
+                                                                                       newUsr.PIPROFILEID,
+                                                                                       newUsr.PCNICKNAME,
+                                                                                       newUsr.PCUSERPSW
+                                                                                  ]);
+   if(!result.insertId == 0){                                                                                     
+   newUsr.fiIdUser = result.insertId;
    return done(null, newUsr);
-  }
-  catch(ex){
-       console.log('Error appers: '+ ex.message);
-  }
+   }
+else{
+ done(null,false,req.flash('errormessage','Ocurrió un error al insertar el nuevo usuario.'));
+}
+
 }));
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user.fiIdUser);
 });
 
-passport.deserializeUser( async (id, done) =>{
+passport.deserializeUser( async (fiIdUser, done) =>{
 try{
-  const rows = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
-  
-   return done(null, rows[0]);
+  const rows = await pool.query('CALL SPWEBRETURNUSERINFO(?,?)', [fiIdUser,null]);
+  const user = rows[0][0];
+   return done(null, user);
 }
 catch(ex){
    console.log(ex.message);

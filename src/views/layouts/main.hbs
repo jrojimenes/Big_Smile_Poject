@@ -5,126 +5,29 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Big Smile</title>
-  {{!-- Style for template --}}
-  <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png" />
-  {{!-- STYLES --}}
-  <link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
-  <link href='http://fonts.googleapis.com/css?family=Amaranth' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <title>Principal Page</title>
   {{!-- GOOGLE FONTS --}}
   <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
   {{!-- BOOTSTRAP 4 --}}
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   {{!-- FONT AWESOME 5 --}}
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-    crossorigin="anonymous"> 
+    crossorigin="anonymous">
+  {{!-- STYLES --}}
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
-
 <body>
-  <!-- Begin Wrapper -->
- <div id="wrapper">
-      {{>message}} 
-   	<!-- Begin Sidebar -->
-	  <div id="sidebar">
-          {{>navigation}}
-    </div>
-	<!-- End Sidebar -->
 
-  <!-- Begin Content -->
-	<div id="content">
+   {{>navigation}}
+    {{>message}} 
+    {{{ body }}}
 
-       {{{ body }}}
-
-{{!-- Footer --}}
-
- <!-- Begin Footer -->
-        <div id="footer">
-        <div class="footer-box one-third">
-        <h3>Popular Posts</h3>
-          <ul class="popular-posts">
-            <li>
-              <a href="#"><img src="img/art/s1.jpg" alt="" /></a>
-              <h5><a href="#">Dolor Commodo Consectetur</a></h5>
-              <span>26 Aug 2011 | <a href="#">21 Comments</a></span>
-            </li>
-            
-            <li>
-              <a href="#"><img src="img/art/s2.jpg" alt="" /></a>
-              <h5><a href="#">Dolor Commodo Consectetur</a></h5>
-              <span>26 Aug 2011 | <a href="#">21 Comments</a></span>
-            </li>
-            
-            <li>
-              <a href="#"><img src="img/art/s3.jpg" alt="" /></a>
-              <h5><a href="#">Dolor Commodo Consectetur</a></h5>
-              <span>26 Aug 2011 | <a href="#">21 Comments</a></span>
-            </li>
-
-          </ul>
-        </div>
-        <div class="footer-box one-third">
-        <h3>About</h3>
-        <p>Donec id elit non mi porta gravida at eget metus. Donec ullamcorper nulla non metus auctor fringilla.</p> 
-        <p>Lorem Ipsum Dolor Sit
-              Moon Avenue No:11/21
-              Planet City, Earth<br>
-              <br>
-              <span class="lite1">Fax:</span> +555 797 534 01<br>
-              <span class="lite1">Tel:</span> +555 636 646 62<br>
-              <span class="lite1">E-mail:</span> name@domain.com</p>
-              
-              
-        </div>
-        
-        <div class="footer-box one-third last">
-        <h3>Custom Text</h3>
-        <p>Nullam quis risus eget urna mollis ornare vel eu leo. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna mollis euismod. Nulla vitae elit. </p>
-        <p>Donec ullamcorper nulla non metus auctor fringilla. Maecenas faucibus mollis interdum. Curabitur blandit tempus porttitor.</p>
-        </div>
-        </div>
- <!-- End Footer -->
-	
-
-  </div>
-	<!-- End Content -->
-
-</div>
-<!-- End Wrapper -->
-<div class="clear"></div>
-
-{{!-- SCRIPTS --}}
+  {{!-- SCRIPTS --}}
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous">        
-                                                                            </script>
+    crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous">
-                                                                            </script>
+    crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous">
-                                                                            </script>
-  <script type="text/javascript" src="js/jquery-1.6.4.min.js">
-                                                                            </script>
-  <script type="text/javascript" src="js/ddsmoothmenu.js">
-                                                                            </script>
-  <script type="text/javascript" src="js/jquery.jcarousel.js">
-                                                                            </script>
-  <script type="text/javascript" src="js/jquery.prettyPhoto.js">
-                                                                            </script>
-  <script type="text/javascript" src="js/carousel.js">
-                                                                            </script>
-  <script type="text/javascript" src="js/jquery.flexslider-min.js">
-                                                                            </script>
-  <script type="text/javascript" src="js/jquery.masonry.min.js">
-                                                                            </script>
-  <script type="text/javascript" src="js/jquery.slickforms.js">
-                                                                            </script>
-<script type="text/javascript"   src="js/scripts.js">
-                                                                            </script>
-<!--[if !IE]> -->
-<script type="text/javascript"   src="js/jquery.corner.js">
-                                                                            </script>
-<!-- <![endif]-->
-
+    crossorigin="anonymous"></script>
 </body>
 </html>

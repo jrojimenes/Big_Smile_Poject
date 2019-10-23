@@ -5,7 +5,8 @@ const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
 const flash      = require('connect-flash');
 const session    = require('express-session');
-const MySQLStore = require('express-mysql-session');
+const validator = require('express-validator');
+const MySQLStore = require('express-mysql-session')(session);
 const passport   = require('passport');
 const {database} = require('./keys');
 //////////////////////////////////////////////////////Initializations
@@ -42,14 +43,14 @@ app.use(session({
 
 }));
 //Initialize the flash module for show messages
-app.use(flash());
-
+app.use(flash(app));
 //Initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
+// app.use(validator());
+
 
 app.use(morgan('dev'));
-
 //aceptar info desde el front
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -61,7 +62,7 @@ app.use((req,res,next) =>{
 
    app.locals.success = req.flash('success');
    
-   app.locals.message = req.flash('message');
+   app.locals.errormessage = req.flash('errormessage');
 
    //Save user info in to global variables
    app.locals.user = req.user;
@@ -72,9 +73,9 @@ next();
 
 //////////////////////////////////////////////////Routes
 app.use(require('./routes/index'));
-app.use(require('./routes/authentication'));
-app.use('/links', require('./routes/link'));
-app.use(require('./routes/authentication'));
+app.use(require('./routes/adminBL/authentication'));
+app.use('/links', require('./routes/adminBL/link'));
+
 
 
 ///////////////////////////////////////////////////Public
