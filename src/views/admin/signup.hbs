@@ -1,44 +1,128 @@
-<div class="container p-4">
-  <div class="row">
-    <div class="col-md-8 mx-auto">
-      <div class="card text-center">
-        <div class="card-header">
-          <h3>SignUp</h3>
+<!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+       <div class="row mt">
+          <div class="col-lg-6">
+            <h4><i class="fa fa-angle-right"></i> Alta de Usuarios</h4>
+            <div class="form-panel">
+              <div class="form">
+                <form class="cmxform form-horizontal style-form" action="/signup" method="POST">
+                  <div class="form-group">
+                    <label for="cname" class="control-label col-lg-2">Nombre</label>
+                    <div class="col-lg-10">
+                      <input class=" form-control" id="cname" name="usrname" minlength="2" type="text" required />
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <label for="cemail" class="control-label col-lg-2">Apellido paterno</label>
+                    <div class="col-lg-10">
+                      <input class="form-control " id="usrsecondname" type="text" name="usrsecondname" required />
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <label for="curl" class="control-label col-lg-2">Apellido materno</label>
+                    <div class="col-lg-10">
+                      <input class="form-control " id="usrlastname" type="text" name="usrlastname" required />
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <label for="curl" class="control-label col-lg-2">E-mail</label>
+                    <div class="col-lg-10">
+                      <input class="form-control " id="email" type="email" name="mail" required />
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <label for="curl" class="control-label col-lg-2">Teléfono</label>
+                    <div class="col-lg-10">
+                      <input class="form-control " id="phone" type="number" name="phone" required />
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <label for="curl" class="control-label col-lg-2">Selecciona el perfil</label>
+                    <div class="col-lg-10">
+                      <select class="form-control" id="profile" type="number" name="profileId">
+                        <option>----Selecciona un perfil----</option>
+                          {{#each infoManage.listProfiles}}
+                          <option value="{{fiIdProfile}}">{{fcProfileName}}</option>
+                          {{/each}}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <label for="curl" class="control-label col-lg-2">Alias de usuario</label>
+                    <div class="col-lg-10">
+                      <input class="form-control " id="nickName" type="text" name="nickName" required />
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <label for="curl" class="control-label col-lg-2">Contraseña</label>
+                    <div class="col-lg-10">
+                      <input class="form-control " id="psw" type="password" name="password" required/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-10">
+                      <button class="btn btn-theme" type="submit">Save</button>
+                      {{!-- <button class="btn btn-theme04" type="button">Cancel</button> --}}
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- /form-panel -->
+          </div>
+          <!-- /col-lg-12 -->
         </div>
-        <div class="card-body">
-          <form action="/signup" method="POST">
-            <div class="form-group">
-              <input type="type" name="usrname" placeholder="User Name" class="form-control" autofocus>
+        </section>
+        </section>
+        {{!--  --}}
+ <!-- row -->
+  <section id="main-content">
+      <section class="wrapper">
+        <div class="row mt">
+          <div class="col-md-12">
+            <div class="content-panel">
+              <table class="table table-striped table-advance table-hover">
+                <h4><i class="fa fa-angle-right"></i> Gestión de Usuarios</h4>
+                <hr>
+                <thead>
+                  <tr>
+                    <th><i class="fa fa-bullhorn"></i> Nombre</th>
+                    <th><i class="fa fa-bullhorn"></i> Email</th>
+                    <th><i class="fa fa-bullhorn"></i> Teléfono</th>
+                    <th><i class="fa fa-bullhorn"></i> Perfil</th>
+                    <th><i class="fa fa-bullhorn"></i> Email</th>
+                    <th><i class="fa fa-bullhorn"></i> Alias</th>
+                    <th><i class=" fa fa-edit"></i> Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each infoManage.listUsers}}
+                  <tr>
+                    <td>
+                      <a href="basic_table.html#">{{fcUserName}} {{fcUserSecondName}} {{fcUserSecondName}}</a>
+                    </td>
+                    <td class="hidden-phone">{{fcMail}}</td>
+                    <td class="hidden-phone">{{fiPhoneNumber}} </td>
+                    <td class="hidden-phone">{{fiIdProfile}} </td>
+                    <td class="hidden-phone">{{fcMail}} </td>
+                    <td class="hidden-phone">{{fcUserNickName}} </td>
+                    <td><span class="label label-info label-mini">Due</span></td>
+                    <td>
+                      <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
+                      <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
+                      <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
+                    </td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
             </div>
-            <div class="form-group">
-              <input type="type" name="usrsecondname" placeholder="Second Name" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="type" name="usrlastname" placeholder="Last Name" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="mail" name="mail" placeholder="E-mail" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="number" name="phone" placeholder="Phone number" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="number" name="profileId" placeholder="Select Profile" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="type" name="nickName" placeholder="User NickName" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" name="password" placeholder="Password" class="form-control">
-            </div>
-            <div class="form-group">
-              <button class="btn btn-success btn-block">
-                SingIn
-              </button>
-            </div>
-          </form>
+            <!-- /content-panel -->
+          </div>
+          <!-- /col-md-12 -->
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+        </section>
+        </section>
+        <!-- /row -->        

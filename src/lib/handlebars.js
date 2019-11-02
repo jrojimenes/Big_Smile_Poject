@@ -8,5 +8,10 @@ helpers.timeago = (timestamp) => {
 
 };
 
+helpers.searchRouteImgRoute = (imgRoute) =>{
+
+    return  '/img/promotionsImages/'+imgRoute;
+
+};
 
 module.exports = helpers;

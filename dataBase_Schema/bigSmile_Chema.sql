@@ -51,6 +51,21 @@ BEGIN
              FROM DB_BIGSMILE.TBPROFILE
              WHERE fiStatus = CSIONE
              ORDER BY fcProfileName ASC;
+	 
+     SELECT 
+            fcUserName,
+            fcUserSecondName,
+            fcUserLastName,
+            fcMail,
+            fiPhoneNumber,
+            fiIdProfile,
+            fcUserNickName,
+            fcUserPsw,
+            fiStatus
+            FROM DB_BIGSMILE.TBUSERS
+            WHERE fiStatus = CSIONE
+            ORDER BY fdCreateDate ASC; 
+     
       
 END$$
 DELIMITER ;
@@ -176,13 +191,120 @@ END$$
 DELIMITER ;
 /*===================================================================================================================================*/
 
-call DB_BIGSMILE.SPWEBPROFILEINSERT('CLIENTE');
+/*===============================================================Promotions Table====================================================*/
+CREATE TABLE DB_BIGSMILE.TBPROMOTIONS(
+fiIdPromotion          INT            NOT NULL auto_increment,
+fcPromotionName        VARCHAR(50)    NOT NULL,
+fcDescription          VARCHAR(10000) NOT NULL, 
+fcUrlImage             LONGTEXT       NOT NULL,
+fdStartDate            date           NOT NULL,
+fdEndDate              date           NOT NULL,
+fiCreateUserId         INT            NOT NULL,
+fdCreateDate           date           NOT NULL,
+fiStatus               INT            NOT NULL,
+primary key (fiIdPromotion),
+foreign key (fiCreateUserId) references DB_BIGSMILE.TBUSERS (fiIdUser) 
+);
+
+/*=========================================================================================================================================*/
+/*===============================================================Select promotions Information=============================================*/
+DELIMITER $$
+CREATE PROCEDURE DB_BIGSMILE.SPWEBCREATEPROMOTIONS(IN PCPROMOTIONNAME VARCHAR(50), IN PCPROMDESCRIPTION VARCHAR(200), IN PCPROMOTIONIMAGEURL LONGTEXT, IN PCPROMSTARTDATE VARCHAR(50), IN PCPROMENDDATE VARCHAR(50), IN PIUSERID INT)
+BEGIN
+DECLARE CSSTARTDATE DATE DEFAULT STR_TO_DATE(PCPROMSTARTDATE, '%m/%d/%Y');
+DECLARE CSENDDATE   DATE DEFAULT STR_TO_DATE(PCPROMENDDATE  , '%m/%d/%Y');
+DECLARE CSIUNO      INT  DEFAULT                                        1;
+
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+      
+      /*SELECT CSIERRORRESPONSE AS RESPONSE;*/
+           -- Declare variables to hold diagnostics area information
+    DECLARE errcount INT;
+    DECLARE errno INT;
+    DECLARE msg TEXT;
+    DECLARE csiuno int default 1;
+    GET CURRENT DIAGNOSTICS CONDITION csiuno
+      errno = MYSQL_ERRNO, msg = MESSAGE_TEXT;
+    SELECT 'current DA before mapped insert' AS op, errno, msg;
+    GET STACKED DIAGNOSTICS CONDITION csiuno
+      errno = MYSQL_ERRNO, msg = MESSAGE_TEXT;
+    SELECT 'stacked DA before mapped insert' AS op, errno, msg;
+END;
+
+START TRANSACTION;
+
+INSERT INTO DB_BIGSMILE.TBPROMOTIONS (fcPromotionName, fcDescription, fcUrlImage, fdStartDate, fdEndDate, fiCreateUserId, fdCreateDate, fiStatus)
+							  VALUES (PCPROMOTIONNAME, PCPROMDESCRIPTION, PCPROMOTIONIMAGEURL, CSSTARTDATE, CSENDDATE, PIUSERID,(select now()), CSIUNO);
+
+COMMIT;
+      SELECT  CSIUNO AS RESPONSE;
+
+END$$
+DELIMITER ;
+
+
+/*=========================================================================================================================================*/
+
+/*===============================================================Select promotions Information=============================================*/
+
+DELIMITER $$
+CREATE PROCEDURE DB_BIGSMILE.SPWEBSELECTACTIVEPROMOTIONSINFO()
+BEGIN
+
+DECLARE CSIUNO      INT  DEFAULT                                        1;
+DECLARE CSDNOWDATE  DATE DEFAULT            DATE_FORMAT(NOW(),'%Y-%m-%d');
+
+    
+    SELECT  
+			fcPromotionName,
+            fcDescription,
+		    fcUrlImage
+           FROM DB_BIGSMILE.TBPROMOTIONS
+           WHERE fiStatus = CSIUNO
+           AND  fdStartDate >= CSDNOWDATE  
+           OR   fdEndDate   <= fdStartDate;
+
+END$$
+DELIMITER ;
+
+
+
+/*=======================================================================================================================================*/
+
+/*===============================================================Select promotions Information=============================================*/
+DELIMITER $$
+CREATE PROCEDURE DB_BIGSMILE.SPWEBSELECTALLPROMOTIONSINFO()
+BEGIN
+
+       SELECT 
+               pm.fcPromotionName,
+               pm.fcDescription,
+               pm.fcUrlImage,
+               pm.fdStartDate,
+               pm.fdEndDate,
+               CONCAT(us.fcUserName, ' ', us.fcUserSecondName) AS fcUserName, 
+               pm.fdCreateDate,
+               pm.fiStatus
+               FROM DB_BIGSMILE.TBPROMOTIONS pm
+               INNER JOIN DB_BIGSMILE.TBUSERS us
+               ON pm.fiCreateUserId = us.fiIdUser;
+               
+
+END$$
+DELIMITER ;
+
+
+/*=======================================================================================================================================*/
+
+call DB_BIGSMILE.SPWEBPROFILEINSERT('ADMINISTRADOR');
 
 
 
 CALL DB_BIGSMILE.SPWEBRETURNUSERINFO (1, NULL);
 DROP PROCEDURE DB_BIGSMILE.SPWEBRETURNUSERINFO;
 
+call DB_BIGSMILE.SPWEBSELECTALLPROMOTIONSINFO();
  
 SELECT * FROM DB_BIGSMILE.TBPROFILE;
 SELECT * FROM DB_BIGSMILE.TBUSERS;
@@ -196,3 +318,14 @@ drop procedure nodearch_dbconfig.SPWEBPROFILEINSERT;
 drop procedure DB_BIGSMILE.SPWEBCREATEUSER;
 
 call DB_BIGSMILE.SPWEBCREATEUSER('isa','jasso','adasd','asdas@gmail.com','2312321',1,'isa','1234');
+
+select * from DB_BIGSMILE.TBPROMOTIONS;
+
+call DB_BIGSMILE.SPWEBCREATEPROMOTIONS('asda','adads','C:\\Users\\Rodrigo\\Documents\\GitHub\\Big_Smile_Poject\\src\\public\\img\\promotionsImages\\1572616072209_crearSULinux.PNG','11/06/2019','11/08/2019',1);
+
+
+   SELECT STR_TO_DATE('11/06/2019','%m/%d/%Y');
+   
+   SELECT DATE_FORMAT(NOW(),'%Y-%m-%d');
+
+CALL DB_BIGSMILE.SPWEBSELECTACTIVEPROMOTIONSINFO();

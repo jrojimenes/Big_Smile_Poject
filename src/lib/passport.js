@@ -61,7 +61,7 @@ passport.use('local.signup', new localStrategy({
                                                                                   ]);
    if(!result.insertId == 0){                                                                                     
    newUsr.fiIdUser = result.insertId;
-   return done(null, newUsr);
+   return done(null, newUsr, req.flash('success', 'El usuario se registro correctamente'));
    }
 else{
  done(null,false,req.flash('errormessage','Ocurrió un error al insertar el nuevo usuario.'));

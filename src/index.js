@@ -1,11 +1,11 @@
-const express = require('express');
-const morgan  = require('morgan');
-const path    = require('path');
-const exphbs  = require('express-handlebars');
+const express    = require('express');
+const morgan     = require('morgan');
+const path       = require('path');
+const exphbs     = require('express-handlebars');
 const bodyParser = require('body-parser');
 const flash      = require('connect-flash');
 const session    = require('express-session');
-const validator = require('express-validator');
+const validator  = require('express-validator');
 const MySQLStore = require('express-mysql-session')(session);
 const passport   = require('passport');
 const {database} = require('./keys');
@@ -17,6 +17,8 @@ app.set('port', process.env.PORT || 3000);
 
 //set the path views dir
 app.set('views', path.join(__dirname,'views')); 
+
+app.set('imagesPromo', path.join(__dirname, '/public/img/promotionsImages/'));
 
 //////Configurate handlebars
 app.engine('.hbs', exphbs({
@@ -63,6 +65,8 @@ app.use((req,res,next) =>{
    app.locals.success = req.flash('success');
    
    app.locals.errormessage = req.flash('errormessage');
+
+   global.imageFilesRoute = app.get('imagesPromo');
 
    //Save user info in to global variables
    app.locals.user = req.user;
