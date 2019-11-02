@@ -1,2 +1,3 @@
 # ignore an entire directory
 /node_modules/
+/src/keys.js
